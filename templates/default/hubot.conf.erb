@@ -1,0 +1,12 @@
+## Bot Settings
+export HUBOT_NAME='<%= node['incident_bot']['name'] %>' # what hubot listens to
+
+## Slack Adapter Settings
+export HUBOT_SLACK_TOKEN='<%= @slack_api_key %>'
+
+## Pager Duty Config
+export HUBOT_PAGERDUTY_SUBDOMAIN='<%= node['incident_bot']['pagerduty']['subdomain'] %>'
+export HUBOT_PAGERDUTY_USER_ID='<%= node['incident_bot']['pagerduty']['account'] %>'
+export HUBOT_PAGERDUTY_API_KEY='<%= @pagerduty_apikey %>'
+export HUBOT_PAGERDUTY_SERVICE_API_KEY='<%= @pagerduty_servicekey %>'
+export HUBOT_PAGERDUTY_SERVICES='<%= node['incident_bot']['pagerduty']['services'] %>'
