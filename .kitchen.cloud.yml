@@ -3,12 +3,12 @@ driver:
   name: ec2
   aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] %>
   security_group_ids:  <%= ENV['AWS_SECURITY_GROUPS'] %>
-  region: us-west-2
-  availability_zone: b
+  region:<%= ENV['AWS_REGION'] %>
+  availability_zone: <%= ENV['AWS_AZ'] %>
   require_chef_omnibus: true
   subnet_id:  <%= ENV['AWS_SUBNET'] %>
   #iam_profile_name: chef-client
-  instance_type: t2.small
+  instance_type: t2.micro
   associate_public_ip: true
   interface: public
 
