@@ -7,5 +7,8 @@
 
 node.default['nodejs']['install_method'] = 'binary'
 node.default['nodejs']['version'] = '4.4.2'
-node.default['nodejs']['binary']['checksum'] = '99c4136cf61761fac5ac57f80544140a3793b63e00a65d4a0e528c9db328bf40'
-node.default['nodejs']['npm']['version'] = '2.15.2'
+node.default['nodejs']['binary']['checksum'] = '003a8dcb3c267b9f268e9443ee2ae381bceaebee1cb438688cd52122591c9b56'
+
+nodejs_npm "coffee-script" do
+  version "1.6.3"
+end

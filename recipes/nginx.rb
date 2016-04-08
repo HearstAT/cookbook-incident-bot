@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: incident_bot
-# Recipe:: default
+# Recipe:: apache
 #
 # Copyright (C) 2016 Hearst Automation Team
 #
@@ -21,9 +21,28 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+#
+# Nginx config to setup ssl reverse proxy to hubot listener
 
-include_recipe 'incident_bot::node' # Hubot runs on node and coffee!
-include_recipe 'incident_bot::redis' # Setup Redis to support Hubot Brain
-include_recipe 'incident_bot::hubot' # Install & Configure HUBOT!
-include_recipe 'incident_bot::scripts' # Install Hubot Scripts Needed for Incident Bot
-include_recipe 'incident_bot::nginx' # Create SSL Endpoint for Hubot HTTP Listener
+letsencrypt_certificate node['incident_bot']['endpoint'] do
+  crt node['incident_bot']['nginx']['ssl']['crt_file']
+  key node['incident_bot']['nginx']['ssl']['key_file']
+  method 'http'
+  wwwroot '/opt/hubot'
+end
+
+Chef::Log.info('Including recipe[nginx::default]')
+include_recipe 'nginx::default'
+
+template "#{node['nginx']['dir']}/sites-available/" <<
+         node['incident_bot']['nginx']['site_name'] do
+  source ''
+  owner 'root'
+  group 'root'
+  mode 0644
+  notifies :reload, 'service[nginx]'
+end
+
+nginx_site node['incident_bot']['nginx']['site_name'] do
+  enable true
+end

@@ -1,0 +1,26 @@
+# Dropped off by Chef for <%= node.name %>
+upstream <%= node['incident_bot']['nginx']['site_name'] %>_http_backend {
+  server 127.0.0.1:<%= node['incident_bot']['environment']['PORT'] || node['incident_bot']['http_port'] %>;
+}
+
+server {
+  listen  443 ssl;
+  <% if node['hostname'].count('.') > 0 %>
+  server_name <%= node['hostname'] %> <%= node['incident_bot']['nginx']['server_name_aliases'].join(' ') %>;
+  <% else %>
+  server_name <%= node['fqdn'] %> <%= node['incident_bot']['nginx']['server_name_aliases'].join(' ') %>;
+  <% end %>
+
+  access_log <%= node['nginx']['log_dir'] %>/<%= node['incident_bot']['nginx']['site_name'] %>.access.log;
+
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+  ssl_certificate <%= node['incident_bot']['nginx']['ssl']['crt_file'] %>;
+  ssl_certificate_key <%= node['incident_bot']['nginx']['ssl']['key_file'] %>;
+
+  location / {
+    proxy_pass  http://<%= node['incident_bot']['nginx']['site_name'] %>_http_backend;
+  }
+}
