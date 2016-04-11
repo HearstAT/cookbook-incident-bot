@@ -5,7 +5,6 @@
 # Copyright (C) 2016 Hearst Automation Team
 #
 
-
 user node['incident_bot']['user'] do
   comment 'Hubot User'
   home node['incident_bot']['install_dir']

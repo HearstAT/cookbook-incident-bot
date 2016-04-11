@@ -24,22 +24,22 @@
 
 # AWS Placeholders
 default['incident_bot']['aws'].tap do |aws|
-  aws['redis_bucket'] = ENV['AWS_REDIS_BUCKET']
-  aws['secret_key'] = ENV['AWS_SECRET_KEY']
-  aws['access_key'] = ENV['AWS_ACCESS_KEY']
-  aws['domain'] = ENV['AWS_DOMAIN']
+  aws['redis_bucket'] = ''
+  aws['secret_key'] = ''
+  aws['access_key'] = ''
+  aws['domain'] = ''
 end
 
 # Hubot config
 default['incident_bot'].tap do |bot|
-  bot['name'] = ENV['HUBOT_NAME'] || 'incident-bot'
+  bot['name'] = 'incident-bot'
   bot['adapter'] = 'slack'
-  bot['git_source'] = ENV['HUBOT_SOURCE'] ||'https://github.com/github/hubot.git'
-  bot['version'] = ENV['HUBOT_VERSION'] ||'2.18.0'
-  bot['install_dir'] = ENV['HUBOT_DIR'] || '/opt/incident_bot'
-  bot['user'] =  ENV['HUBOT_USER'] || ENV['HUBOT_NAME'] || 'hubot'
-  bot['group'] = ENV['HUBOT_GROUP'] || ENV['HUBOT_NAME'] || 'hubot'
-  bot['daemon'] = ENV['HUBOT_GROUP'] || 'runit'
+  bot['git_source'] = 'https://github.com/github/hubot.git'
+  bot['version'] = '2.18.0'
+  bot['install_dir'] = '/opt/incident_bot'
+  bot['user'] =  node['incident_bot']['name']
+  bot['group'] = node['incident_bot']['name']
+  bot['daemon'] = 'runit'
 end
 
 default['hubot']['dependencies'] = {
@@ -52,12 +52,12 @@ default['hubot']['dependencies'] = {
 # Set Hubot Environment
 default['incident_bot']['config'].tap do |config|
   config['HUBOT_NAME'] = node['incident_bot']['name']
-  config['HUBOT_SLACK_TOKEN'] = {ENV['SLACK_TOKEN']
-  config['HUBOT_PAGERDUTY_API_KEY'] = ENV['PAGERDUTY_API_KEY']
-  config['HUBOT_PAGERDUTY_SERVICE_API_KEY'] = ENV['PAGERDUTY_SERVICE_API_KEY']
-  config['HUBOT_PAGERDUTY_SUBDOMAIN'] = ENV['PAGERDUTY_SUBDOMAIN']
-  config['HUBOT_PAGERDUTY_USER_ID'] = ENV['PAGERDUTY_USER_ID']
-  config['HUBOT_PAGERDUTY_SERVICES'] = ENV['PAGERDUTY_SERVICES']
+  config['HUBOT_SLACK_TOKEN'] = ''
+  config['HUBOT_PAGERDUTY_API_KEY'] = ''
+  config['HUBOT_PAGERDUTY_SERVICE_API_KEY'] = ''
+  config['HUBOT_PAGERDUTY_SUBDOMAIN'] = ''
+  config['HUBOT_PAGERDUTY_USER_ID'] = ''
+  config['HUBOT_PAGERDUTY_SERVICES'] = ''
 end
 
 # Script List
