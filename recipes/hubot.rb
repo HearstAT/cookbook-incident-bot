@@ -22,14 +22,14 @@ directory node['incident_bot']['install_dir'] do
   mode '0755'
 end
 
-git ::File.join(Chef::Config[:file_cache_path], 'incident_bot') do
+git ::File.join(Chef::Config[:file_cache_path], 'hubot') do
   repository node['incident_bot']['git_source']
   revision "v#{node['incident_bot']['version']}"
-  notifies :install, 'nodejs_npm[incident_bot]', :immediately
+  notifies :install, 'nodejs_npm[hubot]', :immediately
 end
 
 nodejs_npm 'hubot' do
-  path ::File.join(Chef::Config[:file_cache_path], 'incident_bot')
+  path ::File.join(Chef::Config[:file_cache_path], 'hubot')
   json true
   user 'root'
   group 'root'
@@ -55,7 +55,7 @@ template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   group node['incident_bot']['group']
   mode '0644'
   variables node['incident_bot'].to_hash
-  notifies :restart, "#{daemon}_service[incident_bot]", :delayed
+  notifies :restart, "#{daemon}_service[#{node['incident_bot']['name']}]", :delayed
 end
 
 template "#{node['incident_bot']['install_dir']}/package.json" do
@@ -74,5 +74,5 @@ nodejs_npm 'install' do
   user node['incident_bot']['user']
   group node['incident_bot']['group']
   action :nothing
-  notifies :restart, "#{daemon}_service[incident_bot]", :delayed
+  notifies :restart, "#{daemon}_service[#{node['incident_bot']['name']}]", :delayed
 end

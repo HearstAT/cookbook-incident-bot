@@ -13,7 +13,7 @@ node.default["s3fs"]["data"] = {
   "secret_access_key" => node['incident_bot']['aws']['secret_key']
 }
 
-L7_redis_pool 'incident_bot_brain' do
+L7_redis_pool 'incident-bot-brain' do
     port '6379'
     bind '0.0.0.0'
     databases 1

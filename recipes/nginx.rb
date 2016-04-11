@@ -38,7 +38,7 @@ include_recipe 'nginx::default'
 
 template "#{node['nginx']['dir']}/sites-available/" <<
          node['incident_bot']['nginx']['site_name'] do
-  source ''
+  source 'incident-bot.conf.erb'
   owner 'root'
   group 'root'
   mode 0644

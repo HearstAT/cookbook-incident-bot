@@ -3,12 +3,14 @@
 # Install Chef
 CHEFDIR=/var/chef/cookbooks
 
-# Add chef repo
-curl -s https://packagecloud.io/install/repositories/chef/stable/script.deb.sh | bash
-apt-get update
+if [ ! -f /usr/bin/chef-client ]; then
+  # Add chef repo
+  curl -s https://packagecloud.io/install/repositories/chef/stable/script.deb.sh | bash
+  apt-get update
 
-# Install Chef
-apt-get install -y chefdk
+  # Install Chef
+  apt-get install -y chefdk
+fi
 
 # setup cookbooks directory
 sudo mkdir -p /var/chef/cookbooks
