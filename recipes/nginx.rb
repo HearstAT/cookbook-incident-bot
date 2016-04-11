@@ -24,6 +24,8 @@
 #
 # Nginx config to setup ssl reverse proxy to hubot listener
 
+include_recipe 'letsencrypt::default'
+
 letsencrypt_certificate node['incident_bot']['endpoint'] do
   crt node['incident_bot']['nginx']['ssl']['crt_file']
   key node['incident_bot']['nginx']['ssl']['key_file']

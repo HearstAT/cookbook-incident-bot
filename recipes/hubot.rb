@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: incident_bot
-# Recipe:: hubot
+# Recipe:: incident_bot
 #
 # Copyright (C) 2016 Hearst Automation Team
 #
@@ -22,14 +22,14 @@ directory node['incident_bot']['install_dir'] do
   mode '0755'
 end
 
-git ::File.join(Chef::Config[:file_cache_path], 'hubot') do
+git ::File.join(Chef::Config[:file_cache_path], 'incident_bot') do
   repository node['incident_bot']['git_source']
   revision "v#{node['incident_bot']['version']}"
-  notifies :install, 'nodejs_npm[hubot]', :immediately
+  notifies :install, 'nodejs_npm[incident_bot]', :immediately
 end
 
 nodejs_npm 'hubot' do
-  path ::File.join(Chef::Config[:file_cache_path], 'hubot')
+  path ::File.join(Chef::Config[:file_cache_path], 'incident_bot')
   json true
   user 'root'
   group 'root'
@@ -46,6 +46,8 @@ daemon = node['incident_bot']['daemon']
   end
 end
 
+include_recipe "incident_bot::_#{daemon}"
+
 # Script Setup
 template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   source 'external-scripts.json.erb'
@@ -53,15 +55,15 @@ template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   group node['incident_bot']['group']
   mode '0644'
   variables node['incident_bot'].to_hash
-  notifies :restart, "#{daemon}_service[hubot]", :delayed
+  notifies :restart, "#{daemon}_service[incident_bot]", :delayed
 end
 
-template "#{node['hubot']['install_dir']}/package.json" do
+template "#{node['incident_bot']['install_dir']}/package.json" do
   source 'package.json.erb'
   owner node['incident_bot']['user']
   group node['incident_bot']['group']
   mode '0644'
-  variables node['hubot'].to_hash
+  variables node['incident_bot'].to_hash
   notifies :install, 'nodejs_npm[install]', :immediately
 end
 
@@ -72,7 +74,5 @@ nodejs_npm 'install' do
   user node['incident_bot']['user']
   group node['incident_bot']['group']
   action :nothing
-  notifies :restart, "#{daemon}_service[hubot]", :delayed
+  notifies :restart, "#{daemon}_service[incident_bot]", :delayed
 end
-
-include_recipe "hubot::_#{daemon}"

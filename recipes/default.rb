@@ -22,8 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+include_recipe 'apt::default'
 include_recipe 'incident_bot::node' # Hubot runs on node and coffee!
 include_recipe 'incident_bot::redis' # Setup Redis to support Hubot Brain
 include_recipe 'incident_bot::hubot' # Install & Configure HUBOT!
-include_recipe 'incident_bot::scripts' # Install Hubot Scripts Needed for Incident Bot
 include_recipe 'incident_bot::nginx' # Create SSL Endpoint for Hubot HTTP Listener

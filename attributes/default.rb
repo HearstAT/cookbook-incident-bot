@@ -68,6 +68,9 @@ default['incident_bot']['nginx'].tap do |nginx|
   nginx['ssl']['key_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{ENV['DOMAIN']}.key"
 end
 
+# Set enpoint/servername
+default['incident_bot']['endpoint'] = "#{node['incident_bot']['name']}.#{ENV['DOMAIN']}"
+
 # Choose daemonize program: 'runit' or 'supervisor'
 default['incident_bot']['daemon'] = ENV['HUBOT_DAEMON'] || 'runit'
 
