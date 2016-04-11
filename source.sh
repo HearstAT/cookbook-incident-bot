@@ -17,3 +17,10 @@ export PAGERDUTY_SERVICE_API_KEY=
 export PAGERDUTY_SUBDOMAIN=
 export PAGERDUTY_USER_ID=
 export PAGERDUTY_SERVICES=
+
+
+# AWS Exports
+export DOMAIN=''
+export AWS_SECRET_KEY=''
+export AWS_ACCESS_KEY=''
+export AWS_REDIS_BUCKET=''
