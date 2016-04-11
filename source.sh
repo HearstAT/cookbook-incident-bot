@@ -9,18 +9,17 @@ export HUBOT_DAEMON='runit'
 export RUNIT_LOGGER='true'
 
 # Slack Exports
-export SLACK_TOKEN=
+export SLACK_TOKEN=''
 
 # Pagerduty Exports
-export PAGERDUTY_API_KEY=
-export PAGERDUTY_SERVICE_API_KEY=
-export PAGERDUTY_SUBDOMAIN=
-export PAGERDUTY_USER_ID=
-export PAGERDUTY_SERVICES=
-
+export PAGERDUTY_API_KEY=''
+export PAGERDUTY_SERVICE_API_KEY=''
+export PAGERDUTY_SUBDOMAIN=''
+export PAGERDUTY_USER_ID=''
+export PAGERDUTY_SERVICES=''
 
 # AWS Exports
-export DOMAIN=''
+export AWS_DOMAIN=''
 export AWS_SECRET_KEY=''
 export AWS_ACCESS_KEY=''
 export AWS_REDIS_BUCKET=''

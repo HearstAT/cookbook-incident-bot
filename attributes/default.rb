@@ -27,6 +27,7 @@ default['incident_bot']['aws'].tap do |aws|
   aws['redis_bucket'] = ENV['AWS_REDIS_BUCKET']
   aws['secret_key'] = ENV['AWS_SECRET_KEY']
   aws['access_key'] = ENV['AWS_ACCESS_KEY']
+  aws['domain'] = ENV['AWS_DOMAIN']
 end
 
 # Hubot config
@@ -49,14 +50,14 @@ default['hubot']['dependencies'] = {
 }
 
 # Set Hubot Environment
-default['incident_bot']['config'] = {
-  "HUBOT_NAME" => node['incident_bot']['name'],
-  "HUBOT_SLACK_TOKEN" => ENV['SLACK_TOKEN'],
-  "HUBOT_PAGERDUTY_API_KEY" => ENV['PAGERDUTY_API_KEY'],
-  "HUBOT_PAGERDUTY_SERVICE_API_KEY" => ENV['PAGERDUTY_SERVICE_API_KEY'],
-  "HUBOT_PAGERDUTY_SUBDOMAIN" => ENV['PAGERDUTY_SUBDOMAIN'],
-  "HUBOT_PAGERDUTY_USER_ID" => ENV['PAGERDUTY_USER_ID'],
-  "HUBOT_PAGERDUTY_SERVICES" => ENV['PAGERDUTY_SERVICES']
+default['incident_bot']['config'].tap do |config|
+  config['HUBOT_NAME'] = node['incident_bot']['name']
+  config['HUBOT_SLACK_TOKEN'] = {ENV['SLACK_TOKEN']
+  config['HUBOT_PAGERDUTY_API_KEY'] = ENV['PAGERDUTY_API_KEY']
+  config['HUBOT_PAGERDUTY_SERVICE_API_KEY'] = ENV['PAGERDUTY_SERVICE_API_KEY']
+  config['HUBOT_PAGERDUTY_SUBDOMAIN'] = ENV['PAGERDUTY_SUBDOMAIN']
+  config['HUBOT_PAGERDUTY_USER_ID'] = ENV['PAGERDUTY_USER_ID']
+  config['HUBOT_PAGERDUTY_SERVICES'] = ENV['PAGERDUTY_SERVICES']
 }
 
 # Script List
@@ -65,12 +66,12 @@ default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me
 default['incident_bot']['nginx'].tap do |nginx|
   nginx['site_name'] = node['incident_bot']['name']
   nginx['server_name_aliases'] = ["#{node['incident_bot']['name']}"]
-  nginx['ssl']['crt_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{ENV['DOMAIN']}.crt"
-  nginx['ssl']['key_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{ENV['DOMAIN']}.key"
+  nginx['ssl']['crt_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.crt"
+  nginx['ssl']['key_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.key"
 end
 
 # Set enpoint/servername
-default['incident_bot']['endpoint'] = "#{node['incident_bot']['name']}.#{ENV['DOMAIN']}"
+default['incident_bot']['endpoint'] = "#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}"
 
 # Choose daemonize program: 'runit' or 'supervisor'
 default['incident_bot']['daemon'] = ENV['HUBOT_DAEMON'] || 'runit'
