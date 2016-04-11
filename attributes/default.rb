@@ -58,7 +58,7 @@ default['incident_bot']['config'].tap do |config|
   config['HUBOT_PAGERDUTY_SUBDOMAIN'] = ENV['PAGERDUTY_SUBDOMAIN']
   config['HUBOT_PAGERDUTY_USER_ID'] = ENV['PAGERDUTY_USER_ID']
   config['HUBOT_PAGERDUTY_SERVICES'] = ENV['PAGERDUTY_SERVICES']
-}
+end
 
 # Script List
 default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me', 'hubot-redis-brain']
