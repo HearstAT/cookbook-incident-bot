@@ -43,6 +43,7 @@ end
 
 default['hubot']['dependencies'] = {
   "hubot-slack" => ">= 3.4.2",
+  "hubot-redis-brain" => "0.0.3",
   "hubot-pager-me" => "2.1.13",
   "hubot-incident" => "0.1.2"
 }
@@ -59,7 +60,7 @@ default['incident_bot']['config'] = {
 }
 
 # Script List
-default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me']
+default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me', 'hubot-redis-brain']
 
 default['incident_bot']['nginx'].tap do |nginx|
   nginx['site_name'] = node['incident_bot']['name']
