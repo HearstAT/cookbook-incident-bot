@@ -22,23 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-node.default['incident_bot']['aws'].tap do |aws|
-  aws['redis_bucket'] = ENV['AWS_REDIS_BUCKET']
-  aws['secret_key'] = ENV['AWS_SECRET_KEY']
-  aws['access_key'] = ENV['AWS_ACCESS_KEY']
-  aws['domain'] = ENV['AWS_DOMAIN']
-end
-
-node.default['incident_bot']['config'].tap do |config|
-  config['HUBOT_NAME'] = node['incident_bot']['name']
-  config['HUBOT_SLACK_TOKEN'] = ENV['SLACK_TOKEN']
-  config['HUBOT_PAGERDUTY_API_KEY'] = ENV['PAGERDUTY_API_KEY']
-  config['HUBOT_PAGERDUTY_SERVICE_API_KEY'] = ENV['PAGERDUTY_SERVICE_API_KEY']
-  config['HUBOT_PAGERDUTY_SUBDOMAIN'] = ENV['PAGERDUTY_SUBDOMAIN']
-  config['HUBOT_PAGERDUTY_USER_ID'] = ENV['PAGERDUTY_USER_ID']
-  config['HUBOT_PAGERDUTY_SERVICES'] = ENV['PAGERDUTY_SERVICES']
-end
-
 include_recipe 'apt::default'
 include_recipe 'incident_bot::node' # Hubot runs on node and coffee!
 include_recipe 'incident_bot::redis' # Setup Redis to support Hubot Brain

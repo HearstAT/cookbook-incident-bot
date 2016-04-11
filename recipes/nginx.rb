@@ -24,14 +24,24 @@
 #
 # Nginx config to setup ssl reverse proxy to hubot listener
 
-include_recipe 'letsencrypt::default'
-
-letsencrypt_certificate node['incident_bot']['endpoint'] do
-  crt node['incident_bot']['nginx']['ssl']['crt_file']
-  key node['incident_bot']['nginx']['ssl']['key_file']
-  method 'http'
-  wwwroot '/opt/hubot'
-end
+# include_recipe 'letsencrypt::default'
+#
+# node.default['letsencrypt']['contact'] = node['incident_bot']['letsencrypt']['contact']
+# node.default['letsencrypt']['endpoint'] = node['incident_bot']['letsencrypt']['endpoint']
+#
+# directory "#{node['incident_bot']['install_dir']}/ssl" do
+#   owner node['incident_bot']['user']
+#   group node['incident_bot']['group']
+#   recursive true
+#   mode '0755'
+# end
+#
+# letsencrypt_certificate node['incident_bot']['endpoint'] do
+#   crt node['incident_bot']['nginx']['ssl']['crt_file']
+#   key node['incident_bot']['nginx']['ssl']['key_file']
+#   method 'http'
+#   wwwroot node['incident_bot']['install_dir']
+# end
 
 Chef::Log.info('Including recipe[nginx::default]')
 include_recipe 'nginx::default'

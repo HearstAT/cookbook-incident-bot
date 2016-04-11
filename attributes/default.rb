@@ -37,8 +37,8 @@ default['incident_bot'].tap do |bot|
   bot['git_source'] = 'https://github.com/github/hubot.git'
   bot['version'] = '2.18.0'
   bot['install_dir'] = '/opt/incident_bot'
-  bot['user'] =  node['incident_bot']['name']
-  bot['group'] = node['incident_bot']['name']
+  bot['user'] = 'hubot'
+  bot['group'] = 'hubot'
   bot['daemon'] = 'runit'
 end
 
@@ -63,21 +63,25 @@ end
 # Script List
 default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me', 'hubot-redis-brain']
 
+# letsencrypt Config
+default['incident_bot']['letsencrypt']['contact'] = ''
+default['incident_bot']['letsencrypt']['endpoint'] = 'https://acme-v01.api.letsencrypt.org'
+
 default['incident_bot']['nginx'].tap do |nginx|
   nginx['site_name'] = node['incident_bot']['name']
   nginx['server_name_aliases'] = ["#{node['incident_bot']['name']}"]
-  nginx['ssl']['crt_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.crt"
-  nginx['ssl']['key_file'] = "/opt/hubot/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.key"
+  nginx['ssl']['crt_file'] = "#{node['incident_bot']['install_dir']}/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.crt"
+  nginx['ssl']['key_file'] = "#{node['incident_bot']['install_dir']}/ssl/#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}.key"
 end
 
 # Set enpoint/servername
 default['incident_bot']['endpoint'] = "#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}"
 
 # Choose daemonize program: 'runit' or 'supervisor'
-default['incident_bot']['daemon'] = ENV['HUBOT_DAEMON'] || 'runit'
+default['incident_bot']['daemon'] = 'runit'
 
 # runit configure
-default['incident_bot']['runit']['default_logger'] = ENV['RUNIT_LOGGER'] || false # Use true to log to /var/log/hubot
+default['incident_bot']['runit']['default_logger'] = true # Use true to log to /var/log/hubot
 
 # Supervisor configure
 default['incident_bot']['supervisor'].tap do |supervisor|
