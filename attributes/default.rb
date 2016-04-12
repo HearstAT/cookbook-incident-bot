@@ -36,7 +36,7 @@ default['incident_bot'].tap do |bot|
   bot['adapter'] = 'slack'
   bot['git_source'] = 'https://github.com/github/hubot.git'
   bot['version'] = '2.18.0'
-  bot['install_dir'] = "/opt/#{node['incident-bot']['name']}"
+  bot['install_dir'] = "/opt/#{node['incident_bot']['name']}"
   bot['user'] = 'hubot'
   bot['group'] = 'hubot'
   bot['daemon'] = 'runit'
