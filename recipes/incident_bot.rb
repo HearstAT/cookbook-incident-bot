@@ -45,18 +45,6 @@ daemon = node['incident_bot']['daemon']
   end
 end
 
-include_recipe "incident_bot::_#{daemon}"
-
-# Script Setup
-template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
-  source 'external-scripts.json.erb'
-  owner node['incident_bot']['user']
-  group node['incident_bot']['group']
-  mode '0644'
-  variables node['incident_bot'].to_hash
-  notifies :restart, "#{daemon}_service[#{node['incident_bot']['name']}]", :delayed
-end
-
 template "#{node['incident_bot']['install_dir']}/package.json" do
   source 'package.json.erb'
   owner node['incident_bot']['user']
@@ -66,6 +54,17 @@ template "#{node['incident_bot']['install_dir']}/package.json" do
   notifies :install, 'nodejs_npm[install]', :immediately
 end
 
+include_recipe "incident_bot::_#{daemon}"
+
+# Script Setup
+template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
+  source 'external-scripts.json.erb'
+  owner node['incident_bot']['user']
+  group node['incident_bot']['group']
+  mode '0644'
+  variables node['incident_bot'].to_hash
+  notifies :restart, "#{daemon}_service[incident-bot]", :delayed
+end
 
 nodejs_npm 'install' do
   path node['incident_bot']['install_dir']
@@ -73,5 +72,5 @@ nodejs_npm 'install' do
   user node['incident_bot']['user']
   group node['incident_bot']['group']
   action :nothing
-  notifies :restart, "#{daemon}_service[#{node['incident_bot']['name']}]", :delayed
+  notifies :restart, "#{daemon}_service[incident-bot]", :delayed
 end

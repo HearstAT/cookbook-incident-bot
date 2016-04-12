@@ -6,7 +6,7 @@ hubot_adapter = node['incident_bot']['adapter']
 
 node.default['incident_bot']['config']['PATH'] = "#{node['incident_bot']['install_dir']}/node_modules/.bin:%(ENV_PATH)s"
 
-supervisor_service 'hubot' do
+supervisor_service 'incident-bot' do
   action [:enable, :start]
   autostart true
   autorestart true
