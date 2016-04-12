@@ -1,4 +1,4 @@
-#
+z#
 # Cookbook Name:: incident_bot
 # Hubot Attributes
 #
@@ -36,7 +36,7 @@ default['incident_bot'].tap do |bot|
   bot['adapter'] = 'slack'
   bot['git_source'] = 'https://github.com/github/hubot.git'
   bot['version'] = '2.18.0'
-  bot['install_dir'] = '/opt/incident_bot'
+  bot['install_dir'] = "/opt/#{node['incident-bot']['name']}"
   bot['user'] = 'hubot'
   bot['group'] = 'hubot'
   bot['daemon'] = 'runit'
@@ -76,9 +76,6 @@ end
 
 # Set enpoint/servername
 default['incident_bot']['endpoint'] = "#{node['incident_bot']['name']}.#{node['incident_bot']['aws']['domain']}"
-
-# Choose daemonize program: 'runit' or 'supervisor'
-default['incident_bot']['daemon'] = 'runit'
 
 # runit configure
 default['incident_bot']['runit']['default_logger'] = true # Use true to log to /var/log/hubot
