@@ -1,4 +1,4 @@
-z#
+#
 # Cookbook Name:: incident_bot
 # Hubot Attributes
 #
