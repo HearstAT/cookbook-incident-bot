@@ -26,5 +26,10 @@ L7_redis_pool 'incident-bot-brain' do
     port '6379'
     bind '0.0.0.0'
     databases 1
-    datadir "/opt/redis"
+    datadir "/var/lib/redis"
+end
+
+cron 'redis_sync' do
+  minute '1'
+  command '/usr/bin/rsync -a /var/lib/redis /opt/redis'
 end
