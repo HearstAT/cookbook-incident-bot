@@ -22,14 +22,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-L7_redis_pool 'incident-bot-brain' do
+L7_redis_pool 'bot-brain' do
     port '6379'
     bind '0.0.0.0'
+    appendonly 'no'
     databases 1
-    datadir "/var/lib/redis"
-end
-
-cron 'redis_sync' do
-  minute '1'
-  command '/usr/bin/rsync -a /var/lib/redis /opt/redis'
+    datadir "/opt/redis"
 end

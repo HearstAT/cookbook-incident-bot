@@ -46,6 +46,8 @@ default['hubot']['dependencies'] = {
   "hubot-slack" => ">= 3.4.2",
   "hubot-redis-brain" => "0.0.3",
   "hubot-pager-me" => "2.1.13",
+  "hubot-help" => ">= 0.1.2",
+  "hubot-diagnostics" => ">= 0.0.1",
   "hubot-incident" => "0.1.2"
 }
 
@@ -61,7 +63,12 @@ default['incident_bot']['config'].tap do |config|
 end
 
 # Script List
-default['incident_bot']['external_scripts'] = ['hubot-incident', 'hubot-pager-me', 'hubot-redis-brain']
+default['incident_bot']['external_scripts'] = [ 'hubot-incident',
+                                                'hubot-pager-me',
+                                                'hubot-diagnostics',
+                                                'hubot-help',
+                                                'hubot-redis-brain'
+                                              ]
 
 # letsencrypt Config
 default['incident_bot']['letsencrypt']['contact'] = ''

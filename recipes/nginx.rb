@@ -24,37 +24,47 @@
 #
 # Nginx config to setup ssl reverse proxy to hubot listener
 
-# include_recipe 'letsencrypt::default'
-#
-# node.default['letsencrypt']['contact'] = node['incident_bot']['letsencrypt']['contact']
-# node.default['letsencrypt']['endpoint'] = node['incident_bot']['letsencrypt']['endpoint']
-#
-# directory "#{node['incident_bot']['install_dir']}/ssl" do
-#   owner node['incident_bot']['user']
-#   group node['incident_bot']['group']
-#   recursive true
-#   mode '0755'
-# end
-#
-# letsencrypt_certificate node['incident_bot']['endpoint'] do
-#   crt node['incident_bot']['nginx']['ssl']['crt_file']
-#   key node['incident_bot']['nginx']['ssl']['key_file']
-#   method 'http'
-#   wwwroot node['incident_bot']['install_dir']
-# end
+include_recipe 'letsencrypt'
 
-Chef::Log.info('Including recipe[nginx::default]')
-include_recipe 'nginx::default'
+node.default['letsencrypt']['contact'] = node['incident_bot']['letsencrypt']['contact']
+node.default['letsencrypt']['endpoint'] = node['incident_bot']['letsencrypt']['endpoint']
+
+node.default['nginx']['default_site_enabled'] = false
+
+include_recipe 'nginx'
+
+directory "#{node['incident_bot']['install_dir']}/ssl" do
+  owner node['incident_bot']['user']
+  group node['incident_bot']['group']
+  recursive true
+  mode '0755'
+end
 
 template "#{node['nginx']['dir']}/sites-available/" <<
          node['incident_bot']['nginx']['site_name'] do
-  source 'incident-bot.conf.erb'
+  source 'bot.conf.erb'
   owner 'root'
   group 'root'
   mode 0644
   notifies :reload, 'service[nginx]'
 end
 
+template "#{node['nginx']['dir']}/index.html" do
+  source 'index.html.erb'
+    owner 'root'
+    group 'root'
+    mode 0755
+end
+
 nginx_site node['incident_bot']['nginx']['site_name'] do
   enable true
+  timing :immediately
+end
+
+letsencrypt_certificate node['incident_bot']['endpoint'] do
+  fullchain node['incident_bot']['nginx']['ssl']['crt_file']
+  key node['incident_bot']['nginx']['ssl']['key_file']
+  method 'http'
+  wwwroot node['incident_bot']['install_dir']
+  notifies  :reload, 'service[nginx]'
 end

@@ -39,7 +39,7 @@ end
 daemon = node['incident_bot']['daemon']
 
 # Script Deps
-%w{ libexpat1 libexpat1-dev libicu-dev }.each do |pkg|
+%w(libexpat1 libexpat1-dev libicu-dev).each do |pkg|
   package pkg do
     action :install
   end
@@ -63,7 +63,7 @@ template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   group node['incident_bot']['group']
   mode '0644'
   variables node['incident_bot'].to_hash
-  notifies :restart, "#{daemon}_service[incident-bot]", :delayed
+  notifies :restart, "#{daemon}_service[bot]", :delayed
 end
 
 nodejs_npm 'install' do
@@ -72,5 +72,5 @@ nodejs_npm 'install' do
   user node['incident_bot']['user']
   group node['incident_bot']['group']
   action :nothing
-  notifies :restart, "#{daemon}_service[incident-bot]", :delayed
+  notifies :restart, "#{daemon}_service[bot]", :delayed
 end
