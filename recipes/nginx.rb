@@ -24,12 +24,20 @@
 #
 # Nginx config to setup ssl reverse proxy to hubot listener
 
+node.default['nginx']['default_site_enabled'] = false
+
+
 include_recipe 'letsencrypt'
 
 node.default['letsencrypt']['contact'] = node['incident_bot']['letsencrypt']['contact']
 node.default['letsencrypt']['endpoint'] = node['incident_bot']['letsencrypt']['endpoint']
 
-node.default['nginx']['default_site_enabled'] = false
+# Generate selfsigned certificate so nginx can start
+letsencrypt_selfsigned node['incident_bot']['endpoint'] do
+  crt node['incident_bot']['nginx']['ssl']['crt_file']
+  key node['incident_bot']['nginx']['ssl']['key_file']
+  not_if do ::File.exists?(node['incident_bot']['nginx']['ssl']['crt_file']) end
+end
 
 include_recipe 'nginx'
 
@@ -49,7 +57,7 @@ template "#{node['nginx']['dir']}/sites-available/" <<
   notifies :reload, 'service[nginx]'
 end
 
-template "#{node['nginx']['dir']}/index.html" do
+template "#{node['incident_bot']['install_dir']}/index.html" do
   source 'index.html.erb'
     owner 'root'
     group 'root'

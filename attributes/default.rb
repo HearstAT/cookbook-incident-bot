@@ -42,7 +42,7 @@ default['incident_bot'].tap do |bot|
   bot['daemon'] = 'runit'
 end
 
-default['hubot']['dependencies'] = {
+default['incident_bot']['dependencies'] = {
   "hubot-slack" => ">= 3.4.2",
   "hubot-redis-brain" => "0.0.3",
   "hubot-pager-me" => "2.1.13",

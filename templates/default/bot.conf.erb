@@ -2,6 +2,20 @@
 upstream <%= node['incident_bot']['nginx']['site_name'] %>_http_backend {
   server 127.0.0.1:8080;
 }
+server {
+  listen  80;
+  <% if node['hostname'].count('.') > 0 %>
+  server_name <%= node['hostname'] %> <%= node['incident_bot']['nginx']['server_name_aliases'].join(' ') %>;
+  <% else %>
+  server_name <%= node['fqdn'] %> <%= node['incident_bot']['nginx']['server_name_aliases'].join(' ') %>;
+  <% end %>
+  access_log /var/log/nginx/<%= node['incident_bot']['nginx']['site_name'] %>.access.log;
+
+  location / {
+    root   <%= node['incident_bot']['install_dir'] %>;
+    index  index.html;
+  }
+}
 
 server {
   listen  443 ssl;
