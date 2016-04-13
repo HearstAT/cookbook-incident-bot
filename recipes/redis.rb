@@ -27,5 +27,10 @@ L7_redis_pool 'bot-brain' do
     bind '0.0.0.0'
     appendonly 'no'
     databases 1
-    datadir "/opt/redis"
+    datadir "/var/lib/redis"
+end
+
+cron 'redis_sync' do
+  minute '1'
+  command '/usr/bin/rsync -a /var/lib/redis/ /opt/redis'
 end
