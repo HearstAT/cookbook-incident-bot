@@ -26,11 +26,18 @@
 
 node.default['nginx']['default_site_enabled'] = false
 
-
 include_recipe 'letsencrypt'
 
 node.default['letsencrypt']['contact'] = node['incident_bot']['letsencrypt']['contact']
 node.default['letsencrypt']['endpoint'] = node['incident_bot']['letsencrypt']['endpoint']
+
+# Create SSL directory for certs to be generated
+directory "#{node['incident_bot']['install_dir']}/ssl" do
+  owner node['incident_bot']['user']
+  group node['incident_bot']['group']
+  recursive true
+  mode '0755'
+end
 
 # Generate selfsigned certificate so nginx can start
 letsencrypt_selfsigned node['incident_bot']['endpoint'] do
@@ -41,13 +48,7 @@ end
 
 include_recipe 'nginx'
 
-directory "#{node['incident_bot']['install_dir']}/ssl" do
-  owner node['incident_bot']['user']
-  group node['incident_bot']['group']
-  recursive true
-  mode '0755'
-end
-
+# Create bot proxy for webhooks
 template "#{node['nginx']['dir']}/sites-available/" <<
          node['incident_bot']['nginx']['site_name'] do
   source 'bot.conf.erb'
@@ -59,9 +60,9 @@ end
 
 template "#{node['incident_bot']['install_dir']}/index.html" do
   source 'index.html.erb'
-    owner 'root'
-    group 'root'
-    mode 0755
+  owner 'root'
+  group 'root'
+  mode 0755
 end
 
 nginx_site node['incident_bot']['nginx']['site_name'] do
@@ -69,10 +70,11 @@ nginx_site node['incident_bot']['nginx']['site_name'] do
   timing :immediately
 end
 
+# Generate real certs
 letsencrypt_certificate node['incident_bot']['endpoint'] do
   fullchain node['incident_bot']['nginx']['ssl']['crt_file']
   key node['incident_bot']['nginx']['ssl']['key_file']
   method 'http'
   wwwroot node['incident_bot']['install_dir']
-  notifies  :reload, 'service[nginx]'
+  notifies :restart, 'service[nginx]'
 end
