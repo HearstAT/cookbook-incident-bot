@@ -22,13 +22,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# AWS Placeholders
-default['incident_bot']['aws'].tap do |aws|
-  aws['redis_bucket'] = ''
-  aws['secret_key'] = ''
-  aws['access_key'] = ''
-  aws['domain'] = ''
-end
+# AWS
+default['incident_bot']['aws']['domain'] = ''
+
+# Redis
+default['incident_bot']['redis']['dir'] = ''
 
 # Hubot config
 default['incident_bot'].tap do |bot|

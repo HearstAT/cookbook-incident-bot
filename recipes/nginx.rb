@@ -55,7 +55,7 @@ template "#{node['nginx']['dir']}/sites-available/" <<
   owner 'root'
   group 'root'
   mode 0644
-  notifies :reload, 'service[nginx]'
+  notifies :reload, 'service[nginx]', :immediately
 end
 
 template "#{node['incident_bot']['install_dir']}/index.html" do
@@ -76,5 +76,5 @@ letsencrypt_certificate node['incident_bot']['endpoint'] do
   key node['incident_bot']['nginx']['ssl']['key_file']
   method 'http'
   wwwroot node['incident_bot']['install_dir']
-  notifies :restart, 'service[nginx]'
+  notifies :restart, 'service[nginx]', :delayed
 end
