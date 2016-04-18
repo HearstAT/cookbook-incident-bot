@@ -55,6 +55,7 @@ template "#{node['nginx']['dir']}/sites-available/" <<
   owner 'root'
   group 'root'
   mode 0644
+  notifies :run, 'execute[sleep]', :immediately
   notifies :reload, 'service[nginx]', :immediately
 end
 
@@ -68,6 +69,13 @@ end
 nginx_site node['incident_bot']['nginx']['site_name'] do
   enable true
   timing :immediately
+  notifies :run, 'execute[sleep]', :immediately
+end
+
+# Catch-22 with NGINX and Letsencrypt
+execute 'sleep' do
+  command 'sleep 30'
+  action :nothing
 end
 
 # Generate real certs
@@ -76,5 +84,6 @@ letsencrypt_certificate node['incident_bot']['endpoint'] do
   key node['incident_bot']['nginx']['ssl']['key_file']
   method 'http'
   wwwroot node['incident_bot']['install_dir']
+  notifies :run, 'execute[sleep]', :immediately
   notifies :restart, 'service[nginx]', :delayed
 end

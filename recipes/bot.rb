@@ -54,9 +54,17 @@ template "#{node['incident_bot']['install_dir']}/package.json" do
   notifies :install, 'nodejs_npm[install]', :immediately
 end
 
-include_recipe "incident_bot::_#{daemon}"
+# Install everything in the package.json
+nodejs_npm 'install' do
+  path node['incident_bot']['install_dir']
+  json true
+  user node['incident_bot']['user']
+  group node['incident_bot']['group']
+  action :nothing
+  notifies :restart, "#{daemon}_service[bot]", :delayed
+end
 
-# Script Setup
+# Enabled External Scripts
 template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   source 'external-scripts.json.erb'
   owner node['incident_bot']['user']
@@ -66,11 +74,4 @@ template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
   notifies :restart, "#{daemon}_service[bot]", :delayed
 end
 
-nodejs_npm 'install' do
-  path node['incident_bot']['install_dir']
-  json true
-  user node['incident_bot']['user']
-  group node['incident_bot']['group']
-  action :nothing
-  notifies :restart, "#{daemon}_service[bot]", :delayed
-end
+include_recipe "incident_bot::_#{daemon}"
