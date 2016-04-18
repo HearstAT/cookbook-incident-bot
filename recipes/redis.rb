@@ -22,11 +22,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-L7_redis_pool 'bot-brain' do
-    port '6379'
-    bind '0.0.0.0'
-    appendonly 'no'
-    databases 1
-    datadir node['incident_bot']['redis']['dir']
+
+package 'redis-server'
+
+template '/etc/redis/redis.conf' do
+  source 'redis.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 0775
+end
+
+service 'redis-server' do
+  action :start
+  supports status: true, restart: true
+  status_command '/etc/init.d/redis-server status'
 end
 

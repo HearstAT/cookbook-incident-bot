@@ -27,6 +27,7 @@ default['incident_bot']['aws']['domain'] = ''
 
 # Redis
 default['incident_bot']['redis']['dir'] = ''
+default['incident_bot']['redis']['logfile'] = '/var/log/redis/redis-server.log'
 
 # Hubot config
 default['incident_bot'].tap do |bot|

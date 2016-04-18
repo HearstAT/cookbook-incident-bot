@@ -8,7 +8,6 @@ version '1.0.0'
 
 supports 'ubuntu', '>= 10.04'
 
-depends 'L7-redis'
 depends 'letsencrypt'
 depends 'supervisor'
 depends 'runit'
