@@ -18,7 +18,7 @@ directory node['incident_bot']['install_dir'] do
   owner node['incident_bot']['user']
   group node['incident_bot']['group']
   recursive true
-  mode '0777'
+  mode '0755'
 end
 
 git ::File.join(Chef::Config[:file_cache_path], 'hubot') do
