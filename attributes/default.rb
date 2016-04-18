@@ -47,7 +47,7 @@ default['incident_bot']['dependencies'] = {
   "hubot-pager-me" => "2.1.13",
   "hubot-help" => ">= 0.1.2",
   "hubot-diagnostics" => ">= 0.0.1",
-  "hubot-incident" => "0.1.2"
+  "hubot-incident" => ">= 0.2.0"
 }
 
 # Set Hubot Environment

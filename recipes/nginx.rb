@@ -55,8 +55,6 @@ template "#{node['nginx']['dir']}/sites-available/" <<
   owner 'root'
   group 'root'
   mode 0644
-  notifies :run, 'execute[sleep]', :immediately
-  notifies :reload, 'service[nginx]', :immediately
 end
 
 template "#{node['incident_bot']['install_dir']}/index.html" do
@@ -68,8 +66,8 @@ end
 
 nginx_site node['incident_bot']['nginx']['site_name'] do
   enable true
-  timing :immediately
   notifies :run, 'execute[sleep]', :immediately
+  notifies :restart, 'service[nginx]', :immediately
 end
 
 # Catch-22 with NGINX and Letsencrypt
