@@ -25,16 +25,20 @@
 
 package 'redis-server'
 
+service 'redis-server' do
+  action :nothing
+  supports status: true, start: true, stop: true, restart: true
+  status_command '/etc/init.d/redis-server status'
+  restart_command '/etc/init.d/redis-server restart'
+  start_command '/etc/init.d/redis-server start'
+  stop_command '/etc/init.d/redis-server stop'
+end
+
 template '/etc/redis/redis.conf' do
   source 'redis.conf.erb'
   owner 'root'
   group 'root'
   mode 0775
-end
-
-service 'redis-server' do
-  action :start
-  supports status: true, restart: true
-  status_command '/etc/init.d/redis-server status'
+  notifies :restart, 'service[redis-server]'
 end
 
