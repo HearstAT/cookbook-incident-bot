@@ -70,6 +70,13 @@ nginx_site node['incident_bot']['nginx']['site_name'] do
   notifies :restart, 'service[nginx]', :immediately
 end
 
+# Better work around
+execute 'nginxdie' do
+  command 'kill $(ps aux | grep \'[n]ginx\' | awk \'{print $2}\')'
+  action :nothing
+  only_if '$(ps aux | grep \'[n]ginx\' | awk \'{print $2}\')'
+end
+
 # Catch-22 with NGINX and Letsencrypt
 execute 'sleep' do
   command 'sleep 30'
