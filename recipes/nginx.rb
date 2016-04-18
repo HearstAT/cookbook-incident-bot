@@ -66,8 +66,9 @@ end
 
 nginx_site node['incident_bot']['nginx']['site_name'] do
   enable true
+  notifies :run, 'execute[nginxdie]', :immediately
+  notifies :start, 'service[nginx]', :immediately
   notifies :run, 'execute[sleep]', :immediately
-  notifies :restart, 'service[nginx]', :immediately
 end
 
 # Better work around
@@ -77,7 +78,6 @@ execute 'nginxdie' do
   only_if '$(ps aux | grep \'[n]ginx\' | awk \'{print $2}\')'
 end
 
-# Catch-22 with NGINX and Letsencrypt
 execute 'sleep' do
   command 'sleep 30'
   action :nothing
@@ -89,6 +89,6 @@ letsencrypt_certificate node['incident_bot']['endpoint'] do
   key node['incident_bot']['nginx']['ssl']['key_file']
   method 'http'
   wwwroot node['incident_bot']['install_dir']
-  notifies :run, 'execute[sleep]', :immediately
-  notifies :restart, 'service[nginx]', :delayed
+  notifies :run, 'execute[nginxdie]', :immediately
+  notifies :start, 'service[nginx]', :immediately
 end
