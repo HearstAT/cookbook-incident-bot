@@ -35,7 +35,7 @@ directory "#{node['incident_bot']['install_dir']}/ssl" do
   owner node['incident_bot']['user']
   group node['incident_bot']['group']
   recursive true
-  mode '0755'
+  mode 0755
 end
 
 # Generate selfsigned certificate so nginx can start
@@ -66,7 +66,7 @@ template '/etc/nginx/sites-available/default' do
   group 'root'
   mode 0644
   notifies :restart, 'service[nginx]', :immediately
-  notifies :run. 'execute[sleep]', :immediately
+  notifies :run, 'execute[sleep]', :immediately
 end
 
 execute 'sleep' do
@@ -80,6 +80,6 @@ letsencrypt_certificate node['incident_bot']['endpoint'] do
   key node['incident_bot']['nginx']['ssl']['key_file']
   method 'http'
   wwwroot node['incident_bot']['install_dir']
-  notifies :run. 'execute[sleep]', :immediately
+  notifies :run, 'execute[sleep]', :immediately
   notifies :restart, 'service[nginx]'
 end
