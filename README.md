@@ -1,11 +1,8 @@
 # incident_bot-cookbook
-
-This cookbook will install and configure the HearstAT Incident Bot
-
-# Work In Progress
+Companion cookbook for [cfn-incident-bot](https://github.com/HearstAT/cfn-incident-bot) to configure the HearstAT Incident Bot
 
 ## Supported Platforms
 - Ubuntu
 
 ## Usage
-TDB
+Not a stand alone cookbook, please refere to [cfn-incident-bot](https://github.com/HearstAT/cfn-incident-bot) for any usage instructions.
