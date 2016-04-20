@@ -22,15 +22,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-L7_redis_pool 'bot-brain' do
-    port '6379'
-    bind '0.0.0.0'
-    appendonly 'no'
-    databases 1
-    datadir "/var/lib/redis"
+
+package 'redis-server'
+
+service 'redis-server' do
+  action :nothing
+  supports status: true, start: true, stop: true, restart: true
+  status_command '/etc/init.d/redis-server status'
+  restart_command '/etc/init.d/redis-server restart'
+  start_command '/etc/init.d/redis-server start'
+  stop_command '/etc/init.d/redis-server stop'
 end
 
-cron 'redis_sync' do
-  minute '1'
-  command '/usr/bin/rsync -a /var/lib/redis/ /opt/redis'
+template '/etc/redis/redis.conf' do
+  source 'redis.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 0775
+  notifies :restart, 'service[redis-server]'
 end
+

@@ -18,7 +18,7 @@ directory node['incident_bot']['install_dir'] do
   owner node['incident_bot']['user']
   group node['incident_bot']['group']
   recursive true
-  mode '0755'
+  mode 0755
 end
 
 git ::File.join(Chef::Config[:file_cache_path], 'hubot') do
@@ -49,23 +49,12 @@ template "#{node['incident_bot']['install_dir']}/package.json" do
   source 'package.json.erb'
   owner node['incident_bot']['user']
   group node['incident_bot']['group']
-  mode '0644'
+  mode 0644
   variables node['incident_bot'].to_hash
   notifies :install, 'nodejs_npm[install]', :immediately
 end
 
-include_recipe "incident_bot::_#{daemon}"
-
-# Script Setup
-template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
-  source 'external-scripts.json.erb'
-  owner node['incident_bot']['user']
-  group node['incident_bot']['group']
-  mode '0644'
-  variables node['incident_bot'].to_hash
-  notifies :restart, "#{daemon}_service[bot]", :delayed
-end
-
+# Install everything in the package.json
 nodejs_npm 'install' do
   path node['incident_bot']['install_dir']
   json true
@@ -74,3 +63,15 @@ nodejs_npm 'install' do
   action :nothing
   notifies :restart, "#{daemon}_service[bot]", :delayed
 end
+
+# Enabled External Scripts
+template "#{node['incident_bot']['install_dir']}/external-scripts.json" do
+  source 'external-scripts.json.erb'
+  owner node['incident_bot']['user']
+  group node['incident_bot']['group']
+  mode 0644
+  variables node['incident_bot'].to_hash
+  notifies :restart, "#{daemon}_service[bot]", :delayed
+end
+
+include_recipe "incident_bot::_#{daemon}"

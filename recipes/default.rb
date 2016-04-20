@@ -27,3 +27,4 @@ include_recipe 'incident_bot::node' # Hubot runs on node and coffee!
 include_recipe 'incident_bot::redis' # Setup Redis to support Hubot Brain
 include_recipe 'incident_bot::bot' #install and configure hubot
 include_recipe 'incident_bot::nginx' # Create SSL Endpoint for Hubot HTTP Listener
+include_recipe 'chef-client' # setup chef runs

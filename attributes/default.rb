@@ -22,13 +22,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# AWS Placeholders
-default['incident_bot']['aws'].tap do |aws|
-  aws['redis_bucket'] = ''
-  aws['secret_key'] = ''
-  aws['access_key'] = ''
-  aws['domain'] = ''
-end
+# AWS
+default['incident_bot']['aws']['domain'] = ''
+
+# Redis
+default['incident_bot']['redis']['dir'] = ''
+default['incident_bot']['redis']['logfile'] = '/var/log/redis/redis-server.log'
 
 # Hubot config
 default['incident_bot'].tap do |bot|
@@ -48,7 +47,7 @@ default['incident_bot']['dependencies'] = {
   "hubot-pager-me" => "2.1.13",
   "hubot-help" => ">= 0.1.2",
   "hubot-diagnostics" => ">= 0.0.1",
-  "hubot-incident" => "0.1.2"
+  "hubot-incident" => ">= 0.2.0"
 }
 
 # Set Hubot Environment
