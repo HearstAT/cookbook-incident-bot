@@ -42,7 +42,7 @@ default['incident_bot'].tap do |bot|
 end
 
 default['incident_bot']['dependencies'] = {
-  "hubot-slack" => ">=3.4.2",
+  "hubot-slack" => ">=4.0.2",
   "hubot-redis-brain" => "0.0.3",
   "hubot-pager-me" => "2.1.13",
   "hubot-help" => ">=0.1.2",
